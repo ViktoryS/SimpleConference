@@ -3,7 +3,12 @@ package model.dao.impl;
 import model.dao.AbstractDao;
 import model.dao.EventDao;
 import model.dao.utils.ItemUtils;
+import model.dao.utils.QueryBuilder;
+import model.dao.utils.constants.RegisterOnEventConstants;
+import model.entity.Address;
 import model.entity.Event;
+import model.entity.Lecture;
+import model.entity.User;
 import model.entity.builders.EventBuilder;
 
 import javax.sql.DataSource;
@@ -11,8 +16,8 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
-import static model.dao.utils.constants.AddressConstants.TABLE;
 import static model.dao.utils.constants.EventConstants.*;
 
 /**
@@ -22,6 +27,25 @@ public class MySqlEventDao extends AbstractDao<Event> implements EventDao{
 
     public MySqlEventDao(DataSource dataSource) {
         super(TABLE, dataSource);
+    }
+
+    @Override
+    public List<Event> findByUser(User user) throws SQLException {
+        String query = QueryBuilder.findWithConditionsManyToMany(tableName, RegisterOnEventConstants.EVENT_ID,
+                RegisterOnEventConstants.TABLE, RegisterOnEventConstants.USER_ID);
+        return super.findAllByQuery(query, user.getId());
+    }
+
+    @Override
+    public List<Event> findByLecture(Lecture lecture) throws SQLException {
+        String query = QueryBuilder.findWithCondition(TABLE, LECTURE_ID);
+        return super.findAllByQuery(query, lecture.getId());
+    }
+
+    @Override
+    public List<Event> findByAddress(Address address) throws SQLException {
+        String query = QueryBuilder.findWithCondition(TABLE, ADDRESS_ID);
+        return super.findAllByQuery(query, address.getId());
     }
 
     @Override

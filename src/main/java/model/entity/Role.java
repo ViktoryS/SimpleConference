@@ -1,7 +1,5 @@
 package model.entity;
 
-import org.jetbrains.annotations.Nullable;
-
 /**
  * Created by Vikki on 22.12.2017.
  */
@@ -27,7 +25,6 @@ public enum Role {
         return name;
     }
 
-    @Nullable
     public static Role findById(Long id){
         for(Role role : Role.values()){
             if(role.getId() == id){

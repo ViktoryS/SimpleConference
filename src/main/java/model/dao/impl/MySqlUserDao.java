@@ -4,8 +4,11 @@ import model.dao.AbstractDao;
 import model.dao.UserDao;
 import model.dao.utils.ItemUtils;
 import model.dao.utils.QueryBuilder;
+import model.dao.utils.constants.LectureConstants;
 import model.dao.utils.constants.RegisterOnEventConstants;
+import model.dao.utils.constants.UserConstants;
 import model.entity.Event;
+import model.entity.Lecture;
 import model.entity.Role;
 import model.entity.User;
 import model.entity.builders.UserBuilder;
@@ -18,7 +21,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static model.dao.utils.constants.AddressConstants.TABLE;
 import static model.dao.utils.constants.UserConstants.*;
 
 /**
@@ -33,6 +35,12 @@ public class MySqlUserDao extends AbstractDao<User> implements UserDao{
     @Override
     protected String[] getPropertyNames() {
         return new String[]{NAME, LOGIN, PASSWORD, EMAIL, ROLE_ID, MARK};
+    }
+
+    @Override
+    public User findByLecture(Lecture lecture) throws SQLException {
+        String query = QueryBuilder.findWithCondition(tableName, LectureConstants.TABLE, LectureConstants.ID);
+        return super.findByQuery(query, lecture.getId());
     }
 
     public List<Event.RegisteredUser> findAllByItem(Event entity) throws SQLException{
@@ -53,6 +61,12 @@ public class MySqlUserDao extends AbstractDao<User> implements UserDao{
             }
             return items;
         }
+    }
+
+    @Override
+    public List<User> findByRole(Role role) throws SQLException{
+        String query = QueryBuilder.findWithCondition(UserConstants.TABLE, UserConstants.ROLE_ID);
+        return findAllByQuery(query, role.getId());
     }
 
     @Override

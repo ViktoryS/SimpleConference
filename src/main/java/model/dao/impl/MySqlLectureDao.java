@@ -3,15 +3,20 @@ package model.dao.impl;
 import model.dao.AbstractDao;
 import model.dao.LectureDao;
 import model.dao.utils.ItemUtils;
+import model.dao.utils.QueryBuilder;
+import model.dao.utils.constants.EventConstants;
+import model.dao.utils.constants.LectureConstants;
+import model.entity.Event;
 import model.entity.Lecture;
+import model.entity.User;
 import model.entity.builders.LectureBuilder;
 
 import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
-import static model.dao.utils.constants.AddressConstants.TABLE;
 import static model.dao.utils.constants.LectureConstants.*;
 
 /**
@@ -21,6 +26,18 @@ public class MySqlLectureDao extends AbstractDao<Lecture> implements LectureDao 
 
     public MySqlLectureDao(DataSource dataSource){
         super(TABLE, dataSource);
+    }
+
+    @Override
+    public Lecture findByEvent(Event event) throws SQLException {
+        String query = QueryBuilder.findWithCondition(TABLE, EventConstants.TABLE, EventConstants.ID);
+        return super.findByQuery(query, event.getId());
+    }
+
+    @Override
+    public List<Lecture> findByUser(User user) throws SQLException {
+        String query = QueryBuilder.findWithCondition(TABLE, LectureConstants.USER_ID);
+        return super.findAllByQuery(query, user.getId());
     }
 
     @Override

@@ -2,14 +2,7 @@ package model.dao;
 
 
 import model.dao.utils.QueryBuilder;
-import model.dao.utils.constants.EventConstants;
-import model.dao.utils.constants.LectureConstants;
-import model.dao.utils.constants.RegisterOnEventConstants;
 import model.entity.Item;
-import model.entity.proxy.AddressProxy;
-import model.entity.proxy.EventProxy;
-import model.entity.proxy.LectureProxy;
-import model.entity.proxy.UserProxy;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -87,40 +80,21 @@ public abstract class AbstractDao<T extends Item> implements GenericDao<T>{
         }
     }
 
-    public T findByEntity(Item entity) throws SQLException {
-        if(entity == null) return null;
-        String query = null;
-        if(entity instanceof LectureProxy){
-            query = QueryBuilder.findWithCondition(tableName, LectureConstants.TABLE, LectureConstants.ID);
-        }else if(entity instanceof EventProxy){
-            query = QueryBuilder.findWithCondition(tableName, EventConstants.TABLE, EventConstants.ID);
-        }
+    protected T findByQuery(String query, Long id) throws SQLException {
         try(Connection connection = dataSource.getConnection();
             PreparedStatement statement = connection.prepareStatement(query)){
-            statement.setLong(1, entity.getId());
+            statement.setLong(1, id);
             ResultSet resultSet = statement.executeQuery();
             resultSet.next();
             return getEntityFromResultSet(resultSet);
         }
     }
 
-    public List<T> findAllByItem(Item entity) throws SQLException {
-        if (entity == null) return null;
-        String query = null;
-        if(entity instanceof LectureProxy){
-            query = QueryBuilder.findWithCondition(tableName, LectureConstants.USER_ID);
-        }else if(entity instanceof AddressProxy){
-            query = QueryBuilder.findWithCondition(tableName, EventConstants.ADDRESS_ID);
-        }else if(entity instanceof UserProxy ){
-            query = tableName.equals(EventConstants.TABLE) ?
-                    QueryBuilder.findWithConditionsManyToMany(tableName, RegisterOnEventConstants.EVENT_ID,
-                    RegisterOnEventConstants.TABLE, RegisterOnEventConstants.USER_ID)
-                    : QueryBuilder.findWithCondition(tableName, LectureConstants.USER_ID);
-        }
+    protected List<T> findAllByQuery(String query, Long id) throws SQLException {
         List<T> items = new ArrayList<>();
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setLong(1, entity.getId());
+            statement.setLong(1, id);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 items.add(getEntityFromResultSet(resultSet));

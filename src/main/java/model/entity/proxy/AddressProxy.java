@@ -17,7 +17,7 @@ public class AddressProxy extends Address {
         if(super.getEvents() != null) return super.getEvents();
         EventDao eventDao = DaoFactory.getInstance().createEventDao();
         try {
-            return eventDao.findAllByItem(this);
+            return eventDao.findByAddress(this);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

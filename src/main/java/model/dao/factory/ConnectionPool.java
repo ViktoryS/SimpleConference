@@ -17,7 +17,7 @@ public class ConnectionPool {
     private static synchronized DataSource initDataSource() {
         if (dataSource == null) {
             BasicDataSource basicDataSource = new BasicDataSource();
-            basicDataSource.setUrl("jdbc:mysql://localhost:3306/flowerdb");
+            basicDataSource.setUrl("jdbc:mysql://localhost:3306/conference_db");
             basicDataSource.setDriverClassName("com.mysql.jdbc.Driver");
             basicDataSource.setUsername("admin");
             basicDataSource.setPassword("admin");

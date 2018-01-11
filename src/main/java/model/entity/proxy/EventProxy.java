@@ -21,7 +21,7 @@ public class EventProxy extends Event {
         if(super.getAddress() != null) return super.getAddress();
         AddressDao addressDao = DaoFactory.getInstance().createAddressDao();
         try {
-            return addressDao.findByEntity(this);
+            return addressDao.findByEvent(this);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -32,7 +32,7 @@ public class EventProxy extends Event {
         if(super.getLecture() != null) return super.getLecture();
         LectureDao lectureDao = DaoFactory.getInstance().createLectureDao();
         try {
-            return lectureDao.findByEntity(this);
+            return lectureDao.findByEvent(this);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

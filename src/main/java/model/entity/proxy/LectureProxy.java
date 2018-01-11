@@ -20,7 +20,7 @@ public class LectureProxy extends Lecture {
         if(super.getSpiker() != null) return super.getSpiker();
         UserDao userDao = DaoFactory.getInstance().createUserDao();
         try {
-            return userDao.findByEntity(this);
+            return userDao.findByLecture(this);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -31,7 +31,7 @@ public class LectureProxy extends Lecture {
         if(super.getEvents() != null) return super.getEvents();
         EventDao eventDao = DaoFactory.getInstance().createEventDao();
         try{
-            return eventDao.findAllByItem(this);
+            return eventDao.findByLecture(this);
         }catch (SQLException e){
             throw new RuntimeException(e);
         }

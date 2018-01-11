@@ -1,7 +1,5 @@
 package model.dao;
 
-import model.entity.Item;
-
 import java.sql.SQLException;
 import java.util.List;
 
@@ -14,6 +12,4 @@ public interface GenericDao<T> {
     List<T> findAll() throws SQLException;
     void update(T entity) throws SQLException;
     void delete(Long id) throws SQLException;
-    T findByEntity(Item entity) throws SQLException;
-    List<T> findAllByItem(Item item) throws SQLException;
 }

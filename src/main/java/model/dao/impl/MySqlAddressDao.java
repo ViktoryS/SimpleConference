@@ -2,7 +2,10 @@ package model.dao.impl;
 
 import model.dao.AbstractDao;
 import model.dao.AddressDao;
+import model.dao.utils.QueryBuilder;
+import model.dao.utils.constants.EventConstants;
 import model.entity.Address;
+import model.entity.Event;
 import model.entity.builders.AddressBuilder;
 
 import javax.sql.DataSource;
@@ -19,6 +22,12 @@ public class MySqlAddressDao extends AbstractDao<Address> implements AddressDao 
 
     public MySqlAddressDao(DataSource dataSource){
         super(TABLE, dataSource);
+    }
+
+    @Override
+    public Address findByEvent(Event event) throws SQLException {
+        String query = QueryBuilder.findWithCondition(TABLE, EventConstants.TABLE, EventConstants.ID);
+        return super.findByQuery(query, event.getId());
     }
 
     @Override
